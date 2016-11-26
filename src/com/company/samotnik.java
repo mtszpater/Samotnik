@@ -7,7 +7,7 @@ import javax.swing.*;
 public class Samotnik{
 
     private static Samotnik instance = null;
-    private spanel can;
+    private Panel can;
     static private JFrame gameFrame;
     private Window window;
     public boolean isActive;
@@ -34,7 +34,7 @@ public class Samotnik{
     }
 
     private void createGUI() {
-        can = new spanel(gameFrame.createImage(500, 500), this);
+        can = new Panel(gameFrame.createImage(500, 500), this);
         gameFrame.add(can);
         createMenu();
     }

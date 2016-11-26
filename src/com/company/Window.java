@@ -21,7 +21,6 @@ public class Window {
 
     private static void setWindowSizeProperty() {
         gameFrame.setSize(new Dimension(532, 602));
-        gameFrame.setMaximumSize(new Dimension(602, 603));
     }
 
     public void setVisibleOfFrame() {
