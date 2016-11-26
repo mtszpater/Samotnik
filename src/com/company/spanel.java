@@ -21,8 +21,10 @@ public class spanel extends JPanel implements MouseListener {
 	private int CheckersCount = 0;
 	private Point lastChecked, currChecked;
 	private boolean Checked = false, CheckedChange = false;
+	private int BoardType;
 
 	public spanel(Image g) {
+		BoardType = 0;
 		generateCurrentAndLastCheckedPoints();
 		Board = new int[20][20];
 
@@ -223,13 +225,24 @@ public class spanel extends JPanel implements MouseListener {
 	}
 
 	private void fillRestOfTable() {
+
+		standardVersionOfTable();
+		if( BoardType == 0)
+			BritishVersionOfTable();
+
+	}
+
+	private void BritishVersionOfTable() {
+		Board[6][6] = 0;
+		Board[6][7] = 0;
+		Board[6][11] = 0;
+		Board[6][12] = 0;
+	}
+
+	private void standardVersionOfTable() {
 		for (int i = 6; i < 13; i++) {
 			for (int j = 6; j < 13; j++) {
 				Board[i][j] = 2;
-				Board[6][6] = 0;
-				Board[6][7] = 0;
-				Board[6][11] = 0;
-				Board[6][12] = 0;
 				Board[7][6] = 0;
 				Board[7][7] = 0;
 				Board[7][11] = 0;
@@ -243,10 +256,13 @@ public class spanel extends JPanel implements MouseListener {
 				Board[11][12] = 0;
 				Board[11][11] = 0;
 				Board[9][9] = 1;
-				CheckersCount = 32;
+				CheckersCount = 36;
 			}
 		}
+
+
 	}
+
 
 	private void fillTable0() {
 		for (int i = 0; i < 20; i++) {
@@ -295,6 +311,16 @@ public class spanel extends JPanel implements MouseListener {
 			case Actions.CHOOSE_POINT:
 				break;
 			case Actions.PAUSE_GAME:
+				break;
+			case Actions.SET_GAME_1:
+				JOptionPane.showMessageDialog(null, "1");
+				BoardType = 0;
+				akcja(Actions.NEW_GAME);
+				break;
+			case Actions.SET_GAME_2:
+				JOptionPane.showMessageDialog(null, "2");
+				BoardType = 1;
+				akcja(Actions.NEW_GAME);
 				break;
 
 //		case 8:
