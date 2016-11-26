@@ -15,12 +15,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class spanel extends JPanel implements MouseListener {
-	int Board[][];
-	public BufferedImage Checker, CheckerRed, CheckerBlue,CheckerRainbow, BoardBackGround;
-	Image offscreen;
-	public int CheckersCount = 0;
-	Point lastChecked, currChecked;
-	boolean Checked = false, CheckedChange = false;
+	private int Board[][];
+	private  BufferedImage Checker, CheckerRed, CheckerBlue,CheckerRainbow, BoardBackGround;
+	private Image offscreen;
+	private int CheckersCount = 0;
+	private Point lastChecked, currChecked;
+	private boolean Checked = false, CheckedChange = false;
 
 	public spanel(Image g) {
 		generateCurrentAndLastCheckedPoints();
@@ -35,7 +35,7 @@ public class spanel extends JPanel implements MouseListener {
 	}
 
 	private void createBoard() {
-		fillTable0();
+		fillTable0();//
 		fillRestOfTable();
 	}
 
