@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] arg) {
 
         Samotnik s = new Samotnik();
-        s.init();
+        s.getInstance().init();
 
     }
 

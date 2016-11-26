@@ -10,11 +10,13 @@ import java.awt.event.KeyEvent;
  */
 public class Menu  implements ActionListener {
 
+    private final Samotnik samotnik;
     JMenuBar menuBar;
     JMenu menu;
     JMenuItem menuItem;
-    spanel can;
+    Panel can;
     ButtonGroup group;
+
 
 
     public void createMenu( ) {
@@ -98,6 +100,7 @@ public class Menu  implements ActionListener {
         menuItem.setMnemonic(vkR);
         group.add(menuItem);
         menu.add(menuItem);
+
     }
     private void aligningMenuToRight() {
         menuBar.add(Box.createHorizontalGlue());
@@ -107,8 +110,9 @@ public class Menu  implements ActionListener {
         menuBar = new JMenuBar();
     }
 
-    public Menu(spanel can) {
+    public Menu(Panel can) {
         this.can = can;
+        this.samotnik = Samotnik.getInstance();
     }
 
 

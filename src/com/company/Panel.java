@@ -13,7 +13,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class spanel extends JPanel implements MouseListener {
+public class Panel extends JPanel implements MouseListener {
+
+
+	class BoardTypes{
+		static final int BRITISH = 1 ;
+		static final int NORMAL = 2 ;
+	}
 	private int Board[][];
 	private  BufferedImage Checker, CheckerRed,CheckerGreen, BoardBackGround,Background, Background_green, Background_red;
 	private Image image;
@@ -22,9 +28,12 @@ public class spanel extends JPanel implements MouseListener {
 	private boolean Checked = false;
 	private int BoardType;
 	private Color currentColor;
+	Samotnik samotnik;
 
-	public spanel(Image g) {
-		BoardType = 0;
+
+	public Panel(Image g, Samotnik samotnik) {
+		this.samotnik = samotnik;
+		BoardType = BoardTypes.BRITISH;
 
 		generateCurrentAndLastCheckedPoints();
 		createBoard();
@@ -248,7 +257,11 @@ public class spanel extends JPanel implements MouseListener {
 				System.exit(0);
 				break;
 			case Actions.ABOUT_GAME:
-				JOptionPane.showMessageDialog(null, "pomoc");
+				JOptionPane.showMessageDialog(null, "Samotnik, jest prostą grą logiczną dla jednej osoby.\n" +
+						" Pole do gry ma kształt krzyża z jednym pustym polem w środku oraz 32 polami zapełnionymi. \n" +
+						"W grze jedynym dozwolonym ruchem jest przeskoczenie pionka innym pionkiem w pionie lub w poziomie,\n" +
+						" co powoduje zbicie przeskoczonego pionka.\n" +
+						" Celem gry jest pozostawienie na planszy jednego pionka, najlepiej jeśli będzie to pionek w centrum.");
 				break;
 			case Actions.ABOUT_APPLICATION:
 				JOptionPane.showMessageDialog(null, "Mateusz Pater -0.1");
@@ -266,13 +279,11 @@ public class spanel extends JPanel implements MouseListener {
 			case Actions.PAUSE_GAME:
 				break;
 			case Actions.SET_GAME_1:
-				JOptionPane.showMessageDialog(null, "1");
-				BoardType = 0;
+				BoardType = BoardTypes.BRITISH;
 				akcja(Actions.NEW_GAME);
 				break;
 			case Actions.SET_GAME_2:
-				JOptionPane.showMessageDialog(null, "2");
-				BoardType = 1;
+				BoardType = BoardTypes.NORMAL;
 				akcja(Actions.NEW_GAME);
 				break;
 
@@ -311,6 +322,7 @@ public class spanel extends JPanel implements MouseListener {
 
 
 	private void createNewGame() {
+		samotnik.isActive = true;
 		createBoard();
 		initRender();
 		repaint();
@@ -324,7 +336,7 @@ public class spanel extends JPanel implements MouseListener {
 
 
 	private boolean BoardIsBritish() {
-		return BoardType == 0;
+		return BoardType == BoardTypes.BRITISH;
 	}
 
 	private void decreaseCount() {
@@ -352,7 +364,7 @@ public class spanel extends JPanel implements MouseListener {
 	}
 
 	private void EndOfGameInformation() {
-		JOptionPane.showMessageDialog(null, "Gratulajce! Wygra?e?!");
+		JOptionPane.showMessageDialog(null, "Gratulajce! Wygrales!");
 		akcja(Actions.ABOUT_GAME);
 	}
 
