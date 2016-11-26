@@ -26,18 +26,16 @@ public class spanel extends JPanel implements MouseListener {
 	public spanel(Image g) {
 		BoardType = 0;
 		generateCurrentAndLastCheckedPoints();
-		Board = new int[20][20];
-
 		createBoard();
 		createImagesForCheckers();
-
 		addMouseListener(this);
 		if (offscreen == null) offscreen = g;
 		initRender();
 	}
 
 	private void createBoard() {
-		fillTable0();//
+		Board = new int[20][20];
+		fillTable0();
 		fillRestOfTable();
 	}
 
@@ -227,9 +225,13 @@ public class spanel extends JPanel implements MouseListener {
 	private void fillRestOfTable() {
 
 		standardVersionOfTable();
-		if( BoardType == 0)
+		if(BoardIsBritish())
 			BritishVersionOfTable();
 
+	}
+
+	private boolean BoardIsBritish() {
+		return BoardType == 0;
 	}
 
 	private void BritishVersionOfTable() {

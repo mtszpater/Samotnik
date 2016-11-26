@@ -16,4 +16,8 @@ class Actions {
     static final String ABOUT_APPLICATION = "10" ;
     static final String SET_GAME_1 = "11" ;
     static final String SET_GAME_2 = "12" ;
+    static final String SET_TO_GREEN = "13" ;
+    static final String SET_TO_BLACK = "14" ;
+    static final String SET_BACKGROUND_TO_BLACK = "15" ;
+    static final String SET_BACKGROUND_TO_GREEN = "15" ;
 }
