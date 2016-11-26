@@ -14,4 +14,6 @@ class Actions {
     static final String PAUSE_GAME = "8" ;
     static final String ABOUT_GAME = "9" ;
     static final String ABOUT_APPLICATION = "10" ;
+    static final String SET_GAME_1 = "11" ;
+    static final String SET_GAME_2 = "12" ;
 }

@@ -226,7 +226,7 @@ public class spanel extends JPanel implements MouseListener {
 		for (int i = 6; i < 13; i++) {
 			for (int j = 6; j < 13; j++) {
 				Board[i][j] = 2;
-				Board[6][6] = 0;//
+				Board[6][6] = 0;
 				Board[6][7] = 0;
 				Board[6][11] = 0;
 				Board[6][12] = 0;

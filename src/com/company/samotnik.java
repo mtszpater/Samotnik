@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class samotnik {
+public class samotnik implements ActionListener, ItemListener{
     public spanel can;
     public statusbar statusBar;
     static public JFrame gameFrame;
@@ -29,13 +29,17 @@ public class samotnik {
         can = new spanel(gameFrame.createImage(500, 500));
         gameFrame.add(can);
 
+        createMenu();
+
+        gameFrame.setJMenuBar(menuBar);
+    }
+
+    private void createMenu() {
         createNavBar();
         createGameBar();
         createMoveBar();
         createSettingBar();
         createHelpBar();
-
-        gameFrame.setJMenuBar(menuBar);
     }
 
     private void createHelpBar() {
@@ -46,8 +50,25 @@ public class samotnik {
     }
 
     private void createSettingBar() {
+
         createNavMenu("Ustawienia", KeyEvent.VK_G);
+
+        ButtonGroup group = new ButtonGroup();
+
+        createRadioButton(group, "Wersja 1", Actions.SET_GAME_1, KeyEvent.VK_R);
+        menuItem.setSelected(true);
+        createRadioButton(group, "Wersja 2", Actions.SET_GAME_2, KeyEvent.VK_O);
+
     }
+
+    private void createRadioButton(ButtonGroup group, String text, String setGame1, int vkR) {
+        menuItem = new JRadioButtonMenuItem(text);
+        menuItem.setActionCommand(setGame1);
+        menuItem.setMnemonic(vkR);
+        group.add(menuItem);
+        menu.add(menuItem);
+    }
+
 
     private void createMoveBar() {
         createNavMenu("Ruchy"   ,               KeyEvent.VK_G);
@@ -74,7 +95,7 @@ public class samotnik {
     private void createMenuItem(String text, String actionCommand, int Key, boolean Enable) {
 
         menuItem = new JMenuItem(text);
-//        menuItem.addActionListener(this);
+        menuItem.addActionListener(this);
         menuItem.setActionCommand(actionCommand);
         menuItem.setMnemonic(Key);
         if (Enable)
@@ -138,4 +159,8 @@ public class samotnik {
     }
 
 
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+
+    }
 }
