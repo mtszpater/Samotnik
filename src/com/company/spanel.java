@@ -11,25 +11,27 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class spanel extends JPanel implements MouseListener {
 	private int Board[][];
-	private  BufferedImage Checker, CheckerRed, CheckerBlue,CheckerRainbow, BoardBackGround;
-	private Image offscreen;
+	private  BufferedImage Checker, CheckerRed,CheckerGreen, BoardBackGround,Background, Background_green, Background_red;
+	private Image image;
 	private int CheckersCount = 0;
 	private Point lastChecked, currChecked;
-	private boolean Checked = false, CheckedChange = false;
+	private boolean Checked = false;
 	private int BoardType;
+	private Color currentColor;
 
 	public spanel(Image g) {
 		BoardType = 0;
+
 		generateCurrentAndLastCheckedPoints();
 		createBoard();
 		createImagesForCheckers();
 		addMouseListener(this);
-		if (offscreen == null) offscreen = g;
+		if (image == null) image = g;
+
 		initRender();
 	}
 
@@ -44,17 +46,29 @@ public class spanel extends JPanel implements MouseListener {
 		paint(g);
 	}
 
+
+	private void paintGrid() {
+		for (int i = 0; i < 20; i++)
+			for (int j = 0; j < 20; j++)
+				if (Board[i][j] == 0)
+					image.getGraphics().drawImage(Background, i * 25, j * 25, i * 25+ 25, j * 25+ 25, i * 25, j * 25, i * 25+ 25, j * 25+ 25, null);
+				else
+					image.getGraphics().drawImage(BoardBackGround, i * 25, j * 25, null);
+	}
+
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		int height = this.getSize().height;
 		int width = this.getSize().width;
 		int x = returnSmaller(width, height);
-		g.drawImage(offscreen, width>height?(width-height)/2:0, ifXisBiggerThanHeightReturn0ElseReturnHalf(height, width), x, x, null);
+		g.drawImage(image, width>height?(width-height)/2:0, ifXisBiggerThanHeightReturn0ElseReturnHalf(height, width), x, x, null);
 	}
 
 
 	public void initRender() {
-		offscreen.getGraphics().clearRect(0, 0, 530, 601);
+		image.getGraphics().clearRect(0, 0, 530, 601);
+		paintGrid();
 		paintCheckers();
 	}
 
@@ -62,7 +76,7 @@ public class spanel extends JPanel implements MouseListener {
 		for (int i = 0; i < 20; i++) {
 			for (int j = 0; j < 20; j++) {
 				if (isEmptyPoint(Board[i][j])) {
-					offscreen.getGraphics().drawImage(Checker, i * 25, j * 25, null);
+					image.getGraphics().drawImage(Checker, i * 25, j * 25, null);
 				}
 			}
 		}
@@ -71,30 +85,18 @@ public class spanel extends JPanel implements MouseListener {
 
 	private void moveChecker(Point n) {
 		addBackgroundToEmptyPoint(currChecked);
-		offscreen.getGraphics().drawImage(BoardBackGround, (currChecked.x + n.x) / 2 * 25, (currChecked.y + n.y) / 2 * 25, null);
+		image.getGraphics().drawImage(BoardBackGround, (currChecked.x + n.x) / 2 * 25, (currChecked.y + n.y) / 2 * 25, null);
 		addCheckerAtNewPoint(n);
-		offscreen.getGraphics().setColor(new Color(255, 255, 255));
 	}
 
-	private boolean addCheckerAtNewPoint(Point n) {
-		return offscreen.getGraphics().drawImage(Checker, n.x * 25, n.y * 25, null);
-	}
-
-	private void addBackgroundToEmptyPoint(Point last) {
-		offscreen.getGraphics().drawImage(BoardBackGround, last.x * 25, last.y * 25, null);
-	}
 
 	private void moveSelection() {
 		if (lastChecked.x != -1) {
 			addBackgroundToEmptyPoint(lastChecked);
 			addCheckerAtNewPoint(lastChecked);
 		}
-		offscreen.getGraphics().setColor(Color.orange);
-		Graphics2D g2d = (Graphics2D) offscreen.getGraphics();
-		g2d.setStroke(new BasicStroke(1));
-		g2d.drawRect(currChecked.x * 25+ 1, currChecked.y * 25+ 1, 22, 22);
+		setColorOfBorder();
 	}
-
 
 	public void mouseClicked(MouseEvent arg0) {
 
@@ -117,7 +119,6 @@ public class spanel extends JPanel implements MouseListener {
 					currChecked.x = x;
 					currChecked.y = y;
 					Checked = true;
-					CheckedChange = false;
 					if (lastCheckedisNotCurrChecked()) {
 						moveSelection();
 						repaint();
@@ -129,10 +130,12 @@ public class spanel extends JPanel implements MouseListener {
 					setPointAsEmpty();
 					Checked = false;
 					decreaseCount();
+					JOptionPane.showMessageDialog(null, "Pozostalo pionkow "+ CheckersCount);
 					moveChecker(new Point(x, y));
 					setNewPointAsFill(x, y);
 
 					repaint();
+
 					currChecked.x = -1;
 
 					if (EndOfGame()) {
@@ -146,9 +149,182 @@ public class spanel extends JPanel implements MouseListener {
 		}
 	}
 
+	private void createImagesForCheckers() {
+		try {
+			CheckerRed = ImageIO.read(getClass().getResource("red.png"));
+			CheckerGreen = ImageIO.read(getClass().getResource("green.png"));
+			setDefaultChecker();
+			BoardBackGround = ImageIO.read(getClass().getResource("backbackground.jpg"));
+			Background_green = ImageIO.read(getClass().getResource("green.jpg"));
+			Background_red = ImageIO.read(getClass().getResource("red.jpg"));
+			setDefaultBackground();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void setDefaultBackground() {
+		Background = Background_red;
+	}
+
+	private void setDefaultChecker() {
+		currentColor = Color.red;
+		Checker = CheckerRed;
+	}
+
+	private void fillRestOfTable() {
+
+		standardVersionOfTable();
+		if(BoardIsBritish())
+			BritishVersionOfTable();
+
+	}
+
+	private void BritishVersionOfTable() {
+		Board[6][6] = 0;
+		Board[6][7] = 0;
+		Board[6][11] = 0;
+		Board[6][12] = 0;
+		CheckersCount = 33;
+	}
+
+	private void standardVersionOfTable() {
+		for (int i = 6; i < 13; i++) {
+			for (int j = 6; j < 13; j++) {
+				Board[i][j] = 2;
+				Board[7][6] = 0;
+				Board[7][7] = 0;
+				Board[7][11] = 0;
+				Board[7][12] = 0;
+				Board[12][7] = 0;
+				Board[12][6] = 0;
+				Board[12][12] = 0;
+				Board[12][11] = 0;
+				Board[11][6] = 0;
+				Board[11][7] = 0;
+				Board[11][12] = 0;
+				Board[11][11] = 0;
+				Board[9][9] = 1;
+				CheckersCount = 36;
+			}
+		}
+
+
+	}
+
+
+	private void fillTable0() {
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++) {
+				Board[i][j] = 0;
+			}
+		}
+	}
+
+
+
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	public void mousePressed(MouseEvent e){
+	}
+
+	public void mouseReleased(MouseEvent e){
+
+	}
+
+
+
+	public void akcja(String i) {
+		switch (i) {
+			case Actions.NEW_GAME:
+				createNewGame();
+				break;
+			case Actions.END_GAME:
+				System.exit(0);
+				break;
+			case Actions.ABOUT_GAME:
+				JOptionPane.showMessageDialog(null, "pomoc");
+				break;
+			case Actions.ABOUT_APPLICATION:
+				JOptionPane.showMessageDialog(null, "Mateusz Pater -0.1");
+				break;
+			case Actions.GO_DOWN:
+				break;
+			case Actions.GO_UP:
+				break;
+			case Actions.GO_LEFT:
+				break;
+			case Actions.GO_RIGHT:
+				break;
+			case Actions.CHOOSE_POINT:
+				break;
+			case Actions.PAUSE_GAME:
+				break;
+			case Actions.SET_GAME_1:
+				JOptionPane.showMessageDialog(null, "1");
+				BoardType = 0;
+				akcja(Actions.NEW_GAME);
+				break;
+			case Actions.SET_GAME_2:
+				JOptionPane.showMessageDialog(null, "2");
+				BoardType = 1;
+				akcja(Actions.NEW_GAME);
+				break;
+
+			case Actions.SET_TO_GREEN:
+				setCheckerAsGreen();
+				createNewGame();
+				break;
+			case Actions.SET_TO_BLACK:
+				setDefaultChecker();
+				createNewGame();
+				break;
+			case Actions.SET_BACKGROUND_TO_BLACK:
+				setDefaultBackground();
+				createNewGame();
+				break;
+			case Actions.SET_BACKGROUND_TO_GREEN:
+				setBackgroundAsGreen();
+				createNewGame();
+				break;
+//		case 10:
+//			Checker = CheckerRainbow;
+//			initRender();
+//			repaint();
+//			break;
+		}
+	}
+
+	private void setBackgroundAsGreen() {
+		Background = Background_green;
+	}
+
+	private void setCheckerAsGreen() {
+		Checker = CheckerGreen;
+		currentColor = Color.green;
+	}
+
+
+	private void createNewGame() {
+		createBoard();
+		initRender();
+		repaint();
+	}
+
+
 	private void setNewPointAsFill(int x, int y) {
 		Board[x][y] = 2;
 		Board[(x + currChecked.x) / 2][(y + currChecked.y) / 2] = 1;
+	}
+
+
+	private boolean BoardIsBritish() {
+		return BoardType == 0;
 	}
 
 	private void decreaseCount() {
@@ -209,143 +385,19 @@ public class spanel extends JPanel implements MouseListener {
 		currChecked = new Point(-1, -1);
 	}
 
-	private void createImagesForCheckers() {
-		try {
-			CheckerRed = ImageIO.read(getClass().getResource("red.png"));
-			CheckerBlue = ImageIO.read(getClass().getResource("blue.png"));
-			CheckerRainbow = ImageIO.read(getClass().getResource("rainbow.png"));
-			Checker = CheckerRed;
-			BoardBackGround = ImageIO.read(getClass().getResource("board.png"));
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	private boolean addCheckerAtNewPoint(Point n) {
+		return image.getGraphics().drawImage(Checker, n.x * 25, n.y * 25, null);
 	}
 
-	private void fillRestOfTable() {
-
-		standardVersionOfTable();
-		if(BoardIsBritish())
-			BritishVersionOfTable();
-
+	private void addBackgroundToEmptyPoint(Point last) {
+		image.getGraphics().drawImage(BoardBackGround, last.x * 25, last.y * 25, null);
 	}
 
-	private boolean BoardIsBritish() {
-		return BoardType == 0;
+	private void setColorOfBorder() {
+		Graphics2D g2d = (Graphics2D) image.getGraphics();
+		g2d.setStroke(new BasicStroke(1));
+		g2d.setPaint(currentColor);
+		g2d.drawRect(currChecked.x * 25+ 1, currChecked.y * 25+ 1, 22, 22);
 	}
 
-	private void BritishVersionOfTable() {
-		Board[6][6] = 0;
-		Board[6][7] = 0;
-		Board[6][11] = 0;
-		Board[6][12] = 0;
-	}
-
-	private void standardVersionOfTable() {
-		for (int i = 6; i < 13; i++) {
-			for (int j = 6; j < 13; j++) {
-				Board[i][j] = 2;
-				Board[7][6] = 0;
-				Board[7][7] = 0;
-				Board[7][11] = 0;
-				Board[7][12] = 0;
-				Board[12][7] = 0;
-				Board[12][6] = 0;
-				Board[12][12] = 0;
-				Board[12][11] = 0;
-				Board[11][6] = 0;
-				Board[11][7] = 0;
-				Board[11][12] = 0;
-				Board[11][11] = 0;
-				Board[9][9] = 1;
-				CheckersCount = 36;
-			}
-		}
-
-
-	}
-
-
-	private void fillTable0() {
-		for (int i = 0; i < 20; i++) {
-			for (int j = 0; j < 20; j++) {
-				Board[i][j] = 0;
-			}
-		}
-	}
-
-
-
-	public void mouseEntered(MouseEvent arg0) {
-	}
-
-	public void mouseExited(MouseEvent arg0) {
-	}
-
-	public void mousePressed(MouseEvent arg0) {
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-	}
-
-	public void akcja(String i) {
-		switch (i) {
-			case Actions.NEW_GAME:
-				createNewGame();
-				break;
-			case Actions.END_GAME:
-				System.exit(0);
-				break;
-			case Actions.ABOUT_GAME:
-				JOptionPane.showMessageDialog(null, "pomoc");
-				break;
-			case Actions.ABOUT_APPLICATION:
-				JOptionPane.showMessageDialog(null, "Mateusz Pater -0.1");
-				break;
-			case Actions.GO_DOWN:
-				break;
-			case Actions.GO_UP:
-				break;
-			case Actions.GO_LEFT:
-				break;
-			case Actions.GO_RIGHT:
-				break;
-			case Actions.CHOOSE_POINT:
-				break;
-			case Actions.PAUSE_GAME:
-				break;
-			case Actions.SET_GAME_1:
-				JOptionPane.showMessageDialog(null, "1");
-				BoardType = 0;
-				akcja(Actions.NEW_GAME);
-				break;
-			case Actions.SET_GAME_2:
-				JOptionPane.showMessageDialog(null, "2");
-				BoardType = 1;
-				akcja(Actions.NEW_GAME);
-				break;
-
-//		case 8:
-//			Checker = CheckerRed;
-//			initRender();
-//			repaint();
-//			break;
-//		case 9:
-//			Checker = CheckerBlue;
-//			initRender();
-//			repaint();
-//			break;
-//		case 10:
-//			Checker = CheckerRainbow;
-//			initRender();
-//			repaint();
-//			break;
-		}
-	}
-
-	private void createNewGame() {
-		createBoard();
-		initRender();
-		repaint();
-	}
 }

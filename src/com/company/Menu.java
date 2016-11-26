@@ -119,7 +119,7 @@ public class Menu  implements ActionListener {
     private void createBackgroundColorGroup() {
         addSeparator();
         createNewButtonsGroup();
-        createRadioButton(group, "Czarne tło", Actions.SET_BACKGROUND_TO_BLACK, KeyEvent.VK_R);
+        createRadioButton(group, "Czerwone tło", Actions.SET_BACKGROUND_TO_BLACK, KeyEvent.VK_R);
         makeButtonSelected();
         createRadioButton(group, "Zielone tło", Actions.SET_BACKGROUND_TO_GREEN, KeyEvent.VK_O);
     }
@@ -131,7 +131,7 @@ public class Menu  implements ActionListener {
     private void createPawnsColorGroup() {
         addSeparator();
         createNewButtonsGroup();
-        createRadioButton(group, "Czarne piony", Actions.SET_TO_BLACK, KeyEvent.VK_R);
+        createRadioButton(group, "Czerwone piony", Actions.SET_TO_BLACK, KeyEvent.VK_R);
         makeButtonSelected();
         createRadioButton(group, "Zielone piony", Actions.SET_TO_GREEN, KeyEvent.VK_O);
     }

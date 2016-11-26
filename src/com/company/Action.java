@@ -19,5 +19,5 @@ class Actions {
     static final String SET_TO_GREEN = "13" ;
     static final String SET_TO_BLACK = "14" ;
     static final String SET_BACKGROUND_TO_BLACK = "15" ;
-    static final String SET_BACKGROUND_TO_GREEN = "15" ;
+    static final String SET_BACKGROUND_TO_GREEN = "16" ;
 }
