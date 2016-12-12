@@ -1,4 +1,4 @@
-package com.company;
+package com.company.gui;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,9 +27,9 @@ public class Background {
 
     private void createImageForBackground() {
         try {
-            Background_green = ImageIO.read(getClass().getResource("../../resources/green.jpg"));
-            Background_red = ImageIO.read(getClass().getResource("../../resources/red.jpg"));
-            BoardBackGround = ImageIO.read(getClass().getResource("../../resources/backbackground.jpg"));
+            Background_green = ImageIO.read(getClass().getResource("../../../resources/green.jpg"));
+            Background_red = ImageIO.read(getClass().getResource("../../../resources/red.jpg"));
+            BoardBackGround = ImageIO.read(getClass().getResource("../../../resources/backbackground.jpg"));
             setDefaultBackground();
         }
         catch (IOException e) {

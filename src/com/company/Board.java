@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.events.Actions;
+import com.company.tools.*;
 import java.awt.*;
 
 /**
@@ -40,19 +42,10 @@ public class Board {
         standardVersionOfTable();
         if(BoardIsBritish())
             BritishVersionOfTable();
-
-    }
-
-    private void BritishVersionOfTable() {
-        Board[6][6] = 0;
-        Board[6][7] = 0;
-        Board[6][11] = 0;
-        Board[6][12] = 0;
-        PointsCounter.getInstance().setCount(33);
     }
 
     private void standardVersionOfTable() {
-        for (int i = 6; i < 13; i++) {
+        for (int i = 6; i < 13; i++)
             for (int j = 6; j < 13; j++) {
                 Board[i][j] = 2;
                 Board[7][6] = 0;
@@ -68,18 +61,25 @@ public class Board {
                 Board[11][12] = 0;
                 Board[11][11] = 0;
                 Board[9][9] = 1;
-                PointsCounter.getInstance().setCount(36);
+                PointsCounter pointsCounter = PointsCounter.getInstance();
+                pointsCounter.setCount(36);
             }
-        }
-
-
     }
 
     private boolean BoardIsBritish() {
         return boardType == Actions.BRITISH;
     }
-
-    public  boolean isBoardEmpty(int i, int j) {
+    
+    private void BritishVersionOfTable() {
+        Board[6][6] = 0;
+        Board[6][7] = 0;
+        Board[6][11] = 0;
+        Board[6][12] = 0;
+        PointsCounter pointsCounter = PointsCounter.getInstance();
+        pointsCounter.setCount(33);
+    }
+    
+    boolean isBoardEmpty(int i, int j) {
         return Board[i][j] == 0;
     }
 
@@ -89,14 +89,6 @@ public class Board {
 
     public boolean isOne(int i, int j) {
         return Board[i][j] == 1;
-    }
-    
-    public void setBoardTypeAsBritish() {
-        boardType = Actions.BRITISH;
-    }
-
-    public void setBoardTypeAsNormal() {
-        boardType = Actions.NORMAL;
     }
 
     public void setPointAsFill(int x, int y) {

@@ -1,11 +1,12 @@
-package com.company;
+package com.company.tools;
 
 /**
  * author @pater
  */
 public class PointsCounter {
     private static PointsCounter ourInstance = new PointsCounter();
-
+    private int count;
+    
     public static PointsCounter getInstance() {
         return ourInstance;
     }
@@ -17,13 +18,10 @@ public class PointsCounter {
     public int getCount() {
         return count;
     }
-
-    int count;
     
     private PointsCounter() {
     }
-
-
+    
     public void decrease() {
         --count;
     }

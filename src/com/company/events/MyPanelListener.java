@@ -1,4 +1,10 @@
-package com.company;
+package com.company.events;
+
+import com.company.Board;
+import com.company.Panel;
+import com.company.gui.Background;
+import com.company.gui.Pointer;
+import com.company.tools.PointsCounter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,21 +15,20 @@ import java.awt.event.MouseListener;
  * author @pater
  */
 public class MyPanelListener implements MouseListener {
-    Panel panel;
+    private Panel panel;
     private Point lastChecked, currChecked;
     private boolean Checked = false;
     
     public MyPanelListener(Panel panel) {
         this.panel = panel;
         generateCurrentAndLastCheckedPoints();
-        
     }
 
-    private int returnSmaller(int width, int height) {
-        return width>height?height:width;
+    private void generateCurrentAndLastCheckedPoints() {
+        lastChecked = new Point(-1, -1);
+        currChecked = new Point(-1, -1);
     }
     
-
     @Override
     public void mouseClicked(MouseEvent arg0) {
 
@@ -58,7 +63,8 @@ public class MyPanelListener implements MouseListener {
                     setPointAsEmpty();
                     Checked = false;
                     decreaseCount();
-                    JOptionPane.showMessageDialog(null, "Pozostalo pionkow "+ PointsCounter.getInstance().getCount());
+                    PointsCounter pointsCounter = PointsCounter.getInstance();
+                    JOptionPane.showMessageDialog(null, "Pozostalo pionkow "+ pointsCounter.getCount());
                     moveChecker(new Point(x, y));
                     setNewPointAsFill(x, y);
 
@@ -76,7 +82,23 @@ public class MyPanelListener implements MouseListener {
             }
         }
     }
+    
+    private int returnSmaller(int width, int height) {
+        return width>height?height:width;
+    }
+    
+    private int generateXPositionOnClick(MouseEvent arg0, int width, int height, int min) {
+        return (arg0.getX()-(width>height?(width-height)/2:0)) * 500 / min;
+    }
+    
+    private int generateYPositionOnClick(MouseEvent arg0, int width, int height, int min) {
+        return (arg0.getY()-(ifXisBiggerThanHeightReturn0ElseReturnHalf(height, width))) * 500 / min;
+    }
 
+    private boolean InRange(int x, int y) {
+        return x >= 0 && x < 20 && y >= 0 && y < 20;
+    }
+    
     private void moveChecker(Point n) {
         addBackgroundToEmptyPoint(currChecked);
         Background background = Background.getInstance();
@@ -100,7 +122,8 @@ public class MyPanelListener implements MouseListener {
     }
 
     private void decreaseCount() {
-        PointsCounter.getInstance().decrease();
+        PointsCounter pointsCounter = PointsCounter.getInstance();
+        pointsCounter.decrease();
     }
 
     private void setPointAsEmpty() {
@@ -123,27 +146,19 @@ public class MyPanelListener implements MouseListener {
 
     private void EndOfGameInformation() {
         JOptionPane.showMessageDialog(null, "Gratulajce! Wygrales!");
-        panel.reaction(Actions.ABOUT_GAME);
+        ActionManager am = new ActionManager(panel);
+        am.reaction(Actions.END_GAME);
     }
 
     private boolean EndOfGame() {
         return PointsCounter.getInstance().getCount() == 1;
     }
 
-    private int generateYPositionOnClick(MouseEvent arg0, int width, int height, int min) {
-        return (arg0.getY()-(ifXisBiggerThanHeightReturn0ElseReturnHalf(height, width))) * 500 / min;
-    }
 
-    private int generateXPositionOnClick(MouseEvent arg0, int width, int height, int min) {
-        return (arg0.getX()-(width>height?(width-height)/2:0)) * 500 / min;
-    }
     private int ifXisBiggerThanHeightReturn0ElseReturnHalf(int height, int width) {
         return width>height?0:(height-width)/2;
     }
     
-    private boolean InRange(int x, int y) {
-        return x >= 0 && x < 20 && y >= 0 && y < 20;
-    }
 
     private boolean addCheckerAtNewPoint(Point n) {
         Pointer pointer = Pointer.getInstance();
@@ -155,11 +170,6 @@ public class MyPanelListener implements MouseListener {
         Background background = Background.getInstance();
         
         panel.image.getGraphics().drawImage(background.getBoardBackGround(), last.x * 25, last.y * 25, null);
-    }
-
-    private void generateCurrentAndLastCheckedPoints() {
-        lastChecked = new Point(-1, -1);
-        currChecked = new Point(-1, -1);
     }
 
     @Override

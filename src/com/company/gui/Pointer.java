@@ -1,4 +1,4 @@
-package com.company;
+package com.company.gui;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -25,8 +25,8 @@ public class Pointer {
 
     private void importImages() {
         try {
-            CheckerRed = ImageIO.read(getClass().getResource("../../resources/red.png"));
-            CheckerGreen = ImageIO.read(getClass().getResource("../../resources/green.png"));
+            CheckerRed = ImageIO.read(getClass().getResource("../../../resources/red.png"));
+            CheckerGreen = ImageIO.read(getClass().getResource("../../../resources/green.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

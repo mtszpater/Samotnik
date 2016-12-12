@@ -7,17 +7,15 @@ import javax.swing.*;
 public class Samotnik{
 
     private static Samotnik instance = null;
-    private Panel can;
+    private Panel panel;
     static private JFrame gameFrame;
     private Window window;
-    public boolean isActive;
 
 
     protected Samotnik() {
-        isActive = false;
     }
 
-    public static Samotnik getInstance() {
+    static Samotnik getInstance() {
         if(instance == null) {
             instance = new Samotnik();
         }
@@ -25,37 +23,33 @@ public class Samotnik{
     }
 
 
-    public void init() {
-
+    void init() {
         createWindow();
         createGUI();
         setVisibileOfFrame();
 
     }
-
-    private void createGUI() {
-        can = new Panel(gameFrame.createImage(500, 500), this);
-        gameFrame.add(can);
-        createMenu();
-    }
-
-
-
-    private void setVisibileOfFrame() {
-        window.setVisibleOfFrame();
-    }
-
+    
     private void createWindow() {
         gameFrame = new JFrame();
         gameFrame.addNotify();
         window = new Window(gameFrame);
     }
+    
+    private void createGUI() {
+        panel = new Panel(gameFrame.createImage(500, 500));
+        gameFrame.add(panel);
+        createMenu();
+    }
 
     private void createMenu() {
-        Menu menu = new Menu(can);
+        Menu menu = new Menu(panel);
         menu.createMenu();
         gameFrame.setJMenuBar(menu.getMenuBar());
     }
-
+    
+    private void setVisibileOfFrame() {
+        window.setVisibleOfFrame();
+    }
 
 }

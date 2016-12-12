@@ -8,12 +8,12 @@ import java.awt.event.WindowEvent;
 /**
  * author @pater
  */
-public class Window {
+class Window {
 
     static private JFrame gameFrame;
 
-    public Window(JFrame gameFrame) {
-        this.gameFrame = gameFrame;
+    Window(JFrame gameFrame) {
+        Window.gameFrame = gameFrame;
         setWindowSizeProperty();
         addEventOnWindowExit();
 
@@ -23,7 +23,7 @@ public class Window {
         gameFrame.setSize(new Dimension(532, 602));
     }
 
-    public void setVisibleOfFrame() {
+    void setVisibleOfFrame() {
         gameFrame.setVisible(true);
     }
 
