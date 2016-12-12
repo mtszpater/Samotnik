@@ -5,11 +5,6 @@ package com.company;
  */
 class Actions {
     static final String NEW_GAME = "1" ;
-    static final String CHOOSE_POINT = "2" ;
-    static final String GO_UP = "3" ;
-    static final String GO_DOWN = "4" ;
-    static final String GO_LEFT = "5" ;
-    static final String GO_RIGHT = "6" ;
     static final String END_GAME = "7" ;
     static final String PAUSE_GAME = "8" ;
     static final String ABOUT_GAME = "9" ;
@@ -20,4 +15,6 @@ class Actions {
     static final String SET_TO_BLACK = "14" ;
     static final String SET_BACKGROUND_TO_BLACK = "15" ;
     static final String SET_BACKGROUND_TO_GREEN = "16" ;
+    static final int BRITISH = 1 ;
+    static final int NORMAL = 2 ;
 }

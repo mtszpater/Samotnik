@@ -8,9 +8,8 @@ import java.awt.event.KeyEvent;
 /**
  * author @pater
  */
-public class Menu  implements ActionListener {
-
-    private final Samotnik samotnik;
+public class Menu  implements ActionListener  {
+    
     JMenuBar menuBar;
     JMenu menu;
     JMenuItem menuItem;
@@ -22,7 +21,6 @@ public class Menu  implements ActionListener {
     public void createMenu( ) {
         createNavBar();
         createGameBar();
-        createMoveBar();
         createSettingBar();
         createHelpBar();
     }
@@ -41,10 +39,6 @@ public class Menu  implements ActionListener {
         createBackgroundColorGroup();
     }
 
-    private void createMoveBar() {
-        createNavMenu("Ruchy", KeyEvent.VK_G);
-        createMoveButtons();
-    }
     private void createGameBar() {
         createNavMenu("Gra" , KeyEvent.VK_G);
         createGameButtons();
@@ -55,16 +49,6 @@ public class Menu  implements ActionListener {
         addSeparator();
         createMenuItem("O Aplikacji",Actions.ABOUT_APPLICATION.toString(),KeyEvent.VK_D);
     }
-
-    private void createMoveButtons() {
-        createMenuItem("Wybierz punkt", Actions.CHOOSE_POINT,     KeyEvent.VK_D);
-        addSeparator();
-        createMenuItem("Skocz w gore",  Actions.GO_UP  ,          KeyEvent.VK_D);
-        createMenuItem("Skocz w dol",   Actions.GO_DOWN   ,       KeyEvent.VK_D);
-        createMenuItem("Skocz w lewo",  Actions.GO_LEFT ,         KeyEvent.VK_D);
-        createMenuItem("Skocz w prawo", Actions.GO_RIGHT  ,       KeyEvent.VK_D);
-    }
-
 
     private void createGameButtons() {
         createMenuItem("Nowa gra",  Actions.NEW_GAME,      KeyEvent.VK_4);
@@ -112,7 +96,6 @@ public class Menu  implements ActionListener {
 
     public Menu(Panel can) {
         this.can = can;
-        this.samotnik = Samotnik.getInstance();
     }
 
 
@@ -153,7 +136,6 @@ public class Menu  implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         String i = e.getActionCommand();
-        System.out.println(e.paramString());
-        can.akcja(i);
+        can.reaction(i);
     }
 }
